@@ -1,0 +1,138 @@
+
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ <script type="text/javascript" src="buscadr/ajax.js"></script>
+<link rel="stylesheet" type="text/css" href="buscadr/estilos.css" />
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ 
+<script src="http://code.jquery.com/jquery-latest.min.js"></script> 
+ <link href="<?php echo $this->baseUrl(); ?>/css/hwaxevistaestilo.css" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/buscarhwaxe/estilos.css" />
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+$(function () {
+  $("#boton").click(function () {
+      var nFilas = $("#example tr").length-1;
+      
+      var msg = "Filas: "+nFilas;
+      alert(msg);
+    });
+});
+
+
+  function loadXMLDoc()
+{
+var xmlhttp;
+
+var n=document.getElementById('bus').value;
+
+if(n==''){
+document.getElementById("myDiv").innerHTML="";
+return;
+}
+
+if (window.XMLHttpRequest)
+{// code for IE7+, Firefox, Chrome, Opera, Safari
+xmlhttp=new XMLHttpRequest();
+}
+else
+{// code for IE6, IE5
+xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadystatechange=function()
+{
+if (xmlhttp.readyState==4 && xmlhttp.status==200)
+{
+document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+}
+}
+xmlhttp.open("POST","<?php echo $this->baseUrl(); ?>/buscarhwaxe/proc.php",true);
+xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+xmlhttp.send("q="+n);
+}
+</script>
+
+<?php         
+$this->title = "NODO HW AXE";
+$this->headTitle($this->title);
+
+?>
+
+ 
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" Content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js">
+
+
+Buscar <input type="text" id="bus" name="bus" onkeyup="loadXMLDoc()" required />
+
+<div id="myDiv"></div>
+
+<select>
+  <option value="25" >25</option>
+  <option value="50">50</option>
+  <option value="100">100</option>
+  <option value="200" selected>200</option>
+</select>
+
+<table id="example" class="display dataTable" cellspacing="0" width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
+<br>
+<thead>
+<tr role="row" class="odd">
+    <th>Board</th>
+    <th>Nodo</th>
+    <th>Fecha LLT</th>
+    <th>Tipo</th>
+    <th>Position</th>
+    <th>Manufacturade</th>
+    <th>Productname</th>
+    <th>Productnumber</th>
+    <th>Serialnumber</th>
+</tr>
+</thead>
+<tbody>
+<?php
+$enlace = mysql_connect("localhost", "root", "");
+mysql_select_db("localltt", $enlace);
+
+$resultado = mysql_query("SELECT * FROM hw_axe", $enlace);
+$numero_filas = mysql_num_rows($resultado);
+
+
+$i=0;
+
+ foreach($this->albums as $album) : ?>
+<tr role="row" class="odd">
+    <td class="sorting_1 clear"><?php echo $this->escape($album->Board);?></td>
+    <td class="sorting_1"><?php echo $this->escape($album->nodo);?></td>
+    <td class="sorting_1"><?php echo $this->escape($album->fecha);?></td>
+    <td class="sorting_1"><?php echo $this->escape($album->Type);?></td>
+    <td class="sorting_1"><?php echo $this->escape($album->Position);?></td>
+    <td class="sorting_1"><?php echo $this->escape($album->ManufacturedDate);?></td>
+    <td class="sorting_1"><?php echo $this->escape($album->ProductName);?></td>
+    <td class="sorting_1"><?php echo $this->escape($album->ProductNumber);?></td>
+    <td class="sorting_1"><?php echo $this->escape($album->SerialNumber);?></td>
+   
+</tr>
+
+<?php 
+
+if (++$i ==4) break;
+endforeach;  ?>
+</tbody></table>
+
+<div type="button" id="entries"></div>
+<input type="button" id="boton" value="Contar filas y columnas" />
+<?php  ?>

@@ -1,0 +1,52 @@
+ <style>
+
+ a{
+    font-weight: bold;
+    font-size: 13px;
+    font-family:‘Lucida Sans Unicode’, ‘Lucida Grande’, sans-serif;   
+    color:#FFFFFF; 
+    text-decoration:none;
+    background:#00BCFF;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-style: groove #0000FF ;
+    border-radius: 25px;}
+ 
+ p{
+    color:#0000FF;}
+
+  form{
+    margin-left:5%;
+  }
+  h1{
+    color:#0000FF;
+    margin-left:5%;
+  }
+    
+  h2{
+
+    color:#0000FF;
+    font-size:15;
+    font-weight: 10;
+    
+
+  }
+
+
+
+  </style>
+  <?php 
+$this->title = "Eliminar HW CCP";
+$this->headTitle($this->title);
+?>
+<p>Are you sure that you want to delete 
+  '<?php echo $this->escape($this->album['subrack']); ?>' by 
+  '<?php echo $this->escape($this->album['nodo']); ?>'?
+</p>
+<form action="<?php echo $this->url(array('action'=>'delete')); ?>" method="post">
+<div>
+  <input type="hidden" name="id" value="<?php echo $this->album['id']; ?>" />
+  <input type="submit" name="del" value="Yes" />
+  <input type="submit" name="del" value="No" />
+</div>
+</form>

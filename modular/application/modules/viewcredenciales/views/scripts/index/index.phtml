@@ -1,0 +1,130 @@
+
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ <script type="text/javascript" src="buscadr/ajax.js"></script>
+<link rel="stylesheet" type="text/css" href="buscadr/estilos.css" />
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ 
+<script src="http://code.jquery.com/jquery-latest.min.js"></script> 
+ <link href="<?php echo $this->baseUrl(); ?>/css/hwaxevistaestilo.css" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/buscarhwaxe/estilos.css" />
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+$(function () {
+  $("#boton").click(function () {
+      var nFilas = $("#example tr").length-1;
+      
+      var msg = "Filas: "+nFilas;
+      alert(msg);
+    });
+});
+
+
+  function loadXMLDoc()
+{
+var xmlhttp;
+
+var n=document.getElementById('bus').value;
+
+if(n==''){
+document.getElementById("myDiv").innerHTML="";
+return;
+}
+
+if (window.XMLHttpRequest)
+{// code for IE7+, Firefox, Chrome, Opera, Safari
+xmlhttp=new XMLHttpRequest();
+}
+else
+{// code for IE6, IE5
+xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadystatechange=function()
+{
+if (xmlhttp.readyState==4 && xmlhttp.status==200)
+{
+document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+}
+}
+xmlhttp.open("POST","<?php echo $this->baseUrl(); ?>/buscarhwaxe/proc-credenciales.php",true);
+xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+xmlhttp.send("q="+n);
+}
+</script>
+<style>
+  .ej tr:hover{
+    background: red !important;
+  }
+</style>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" Content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js">
+
+
+<?php         
+$this->title = "NODO CREDENCIALES";
+$this->headTitle($this->title);
+
+?>
+
+<script src="https://code.jquery.com/jquery.js" ></script>
+<script src="css/bootstrap/js/bootstrap.min.js"></script>
+
+
+Buscar <input type="text" id="bus" name="bus" onkeyup="loadXMLDoc()" required />
+
+<div id="myDiv"></div>
+
+
+<select>
+  <option value="25" >25</option>
+  <option value="50">50</option>
+  <option value="100">100</option>
+  <option value="200" selected>200</option>
+</select>
+
+<table id="example" class="display dataTable" cellspacing="0" width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
+<br>
+<thead>
+<tr role="row" class="odd">
+    <th>NODO</th>
+    <th>TIPO</th>
+    <th>SUBTIPO</th>
+    <th>UBICACION</th>
+    <th>IP</th>
+    <th>ESTADO</th>
+    <th>USER</th>
+    <th>PASSWORD</th>
+  
+    
+</tr>
+</thead>
+
+<?php foreach($this->albums as $album) : ?>
+<tr role="row" class="odd">
+    <td class="sorting_1 clear"><?php echo $this->escape($album->nodo);?></td>
+    <td class="sorting_1 clear"><?php echo $this->escape($album->tipo);?></td>
+    <td class="sorting_1 clear"><?php echo $this->escape($album->subtipo);?></td>
+    <td class="sorting_1 clear"><?php echo $this->escape($album->ubicacion);?></td>
+    <td class="sorting_1 clear"><?php echo $this->escape($album->ip);?></td>
+    <td class="sorting_1 clear"><?php echo $this->escape($album->estado);?></td>
+    <td class="sorting_1 clear"><?php echo $this->escape($album->usr);?></td>
+    <td class="sorting_1 clear"><?php echo $this->escape($album->pwd);?></td>
+    
+
+</tr>
+<?php endforeach; ?>
+</table>

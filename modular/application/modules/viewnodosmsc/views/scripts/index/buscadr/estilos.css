@@ -1,0 +1,17 @@
+div
+{
+
+margin-top: 10px;
+border-style:dashed;
+width: 500px;
+height: 500px;
+background-color:#F0FFF0;
+text-align: left;
+color:#00008B;
+padding:10px 10px;
+}
+
+body{
+color:#696969;
+font-family:Arial,Helvetica,sans-serif;
+}

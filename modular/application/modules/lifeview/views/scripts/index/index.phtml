@@ -1,0 +1,168 @@
+
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $(function () {
+    $.datepicker.setDefaults($.datepicker.regional["es"]);
+    $("#datepicker").datepicker({
+        dateFormat: 'yy-mm-dd',
+        firstDay: 1
+    }).datepicker("setDate", new Date(fecha1));
+
+ });
+
+// Función para calcular los días transcurridos entre dos fechas
+restaFechas = function(f1,f2)
+ {
+ var aFecha1 = f1.split('/'); 
+ var aFecha2 = f2.split('/'); 
+ var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]); 
+ var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]); 
+ var dif = fFecha2 - fFecha1;
+ var dias = Math.floor(dif / (1000 * 60 * 60 * 24)); 
+ return dias;
+ }
+
+function antiguedad() {
+
+var fechadb=<?php echo $consulta; ?>
+  var d = new Date();
+
+  //Fecha de hoy
+var fecha2 = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
+$("#imprimir").html('Hola ' + fecha2);
+
+var fechaingresada = document.getElementById("datepicker").value;
+var antiguedad= restaFechas(fechadb,fechahoy);
+
+$("#imprimir").html('Hola2 ' + antiguedad);
+    
+}
+//BUSCADOR 
+$.expr[':'].icontains = function(obj, index, meta, stack){
+    return (obj.textContent || obj.innerText || jQuery(obj).text() || '').toLowerCase().indexOf(meta[3].toLowerCase()) >= 0;
+    };
+    $(document).ready(function(){   
+        $('#buscador').keyup(function(){
+                     buscar = $(this).val();
+                     $('#lista tr').removeClass('resaltar');
+                            if(jQuery.trim(buscar) != ''){
+                               $("#lista tr:icontains('" + buscar + "')").addClass('resaltar');
+                            }
+            });
+    });   
+
+</script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script> 
+<script>
+  $.expr[':'].icontains = function(obj, index, meta, stack){
+    return (obj.textContent || obj.innerText || jQuery(obj).text() || '').toLowerCase().indexOf(meta[3].toLowerCase()) >= 0;
+    };
+    $(document).ready(function(){   
+        $('#buscador').keyup(function(){
+                     buscar = $(this).val();
+                     $('#lista tr').removeClass('resaltar');
+                            if(jQuery.trim(buscar) != ''){
+                               $("#lista tr:icontains('" + buscar + "')").addClass('resaltar');
+                            }
+            });
+    });   
+
+
+    //CARGAR BUSCADOR
+
+     function loadXMLDoc()
+{
+var xmlhttp;
+
+var n=document.getElementById('bus').value;
+
+if(n==''){
+document.getElementById("myDiv").innerHTML="";
+return;
+}
+
+if (window.XMLHttpRequest)
+{// code for IE7+, Firefox, Chrome, Opera, Safari
+xmlhttp=new XMLHttpRequest();
+}
+else
+{// code for IE6, IE5
+xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadystatechange=function()
+{
+if (xmlhttp.readyState==4 && xmlhttp.status==200)
+{
+document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+}
+}
+xmlhttp.open("POST","<?php echo $this->baseUrl(); ?>/buscarhwaxe/proc-life.php",true);
+xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+xmlhttp.send("q="+n);
+}
+</script>
+ 
+
+<?php         
+$this->title = "NODO LLT";
+$this->headTitle($this->title);
+
+?>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" Content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="http://code.jquery.com/jquery-latest.min.js"></script> 
+ <link href="<?php echo $this->baseUrl(); ?>/css/hwaxevistaestilo.css" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/buscarhwaxe/estilos.css" />
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js">
+
+
+Buscar <input type="text" id="bus" name="bus" onkeyup="loadXMLDoc()" required />
+
+<div id="myDiv"></div>
+
+<select>
+  <option value="25" >25</option>
+  <option value="50">50</option>
+  <option value="100">100</option>
+  <option value="200" selected>200</option>
+</select>
+
+<table id="example" class="display dataTable" cellspacing="0" width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
+<br>
+<tr role="row" class="odd">
+    <th>Tipo</th>
+    <th>Nodo</th>
+    <th>TP</th>
+    <th>Fecha LLT</th>
+    <th>Antiguedad</th>
+  
+ 
+</tr>
+<?php foreach($this->albums as $album) : ?>
+<tr role="row" class="odd">
+    <td class="sorting_1 clear"><?php echo $this->escape($album->tipo);?></td>
+    <td class="sorting_1 clear"><?php echo $this->escape($album->nodo);?></td>
+    <td class="sorting_1 clear"><?php echo $this->escape($album->tp_llt);?></td>
+    <td class="sorting_1 clear"> <?php echo $this->escape($album->llt);?></td>
+
+    <td class="sorting_1 clear"><?php
+     //AQUI SE CALCULA LA ANTIGUEDAD
+    $fechadb=$album->llt; $fechahoy=date('Y-m-d');
+    $dias = strtotime($fechahoy)-strtotime($fechadb);  
+    $diferencia = intval($dias/86400);  
+    echo $diferencia;   ?> </td>
+    
+   
+</tr>
+<?php endforeach; ?>
+</table>
